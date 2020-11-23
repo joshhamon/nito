@@ -39,3 +39,28 @@ bot.onText(/\/test/, (msg) => {
         bot.sendMessage(id, "You don' test me, I test you!");
 });
 
+bot.onText(/\/ping/, (msg) => {
+	const id=msg.chat.id;
+	var axios = require('axios');
+	var data = JSON.stringify({"id":1,"jsonrpc":"2.0","method":"getblockchaininfo","params":[]});
+	var config = {
+  		method: 'get',
+  		url: 'https://lb-fullnode.incognito.org/fullnode',
+  		headers: { 'Content-Type': 'application/json', 'Cookie': '__cfduid=d3e0ee5cd503ae6a446f48e7e071559911606139640'},
+  		data : data
+		};
+	var startTime = new Date();
+	
+	axios(config)
+	.then(function (response) {
+		var time = new Date() - startTime;
+  		console.log(JSON.stringify(response.data));
+		var c=responce.getResponseCode();
+		if (c==200)
+			{bot.sendMessage(id, "The full node that the incognito app uses has a response code of " +c+" and response time of " + time + "ms, all appears normal.");
+		})
+		else {bot.sendMessage(id, "The full node that the incognito app uses has a response code of " +c+" and response time of " + time + "ms, that's not normal, I recommend going to we.incognito.org.");
+		})
+	.catch(function (error) {console.log(error);});
+	
+}
